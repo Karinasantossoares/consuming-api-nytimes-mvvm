@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/booksActivity">
+
+    <fragment
+        android:id="@+id/booksActivity"
+        android:name="com.example.newyorkbooks.ui.fragments.BooksFragment"
+        android:label="BooksActivity"
+        tools:layout="@layout/fragment_books">
+
+        <action
+            android:id="@+id/action_booksActivity_to_favoriteDetails"
+            app:destination="@id/favoriteDetails" />
+    </fragment>
+    <fragment
+        android:id="@+id/favoriteDetails"
+        android:name="com.example.newyorkbooks.ui.fragments.FavoriteDetailsFragment"
+        android:label="activity_favorite_details"
+        tools:layout="@layout/fragment_favorite_details"
+        />
+</navigation>
