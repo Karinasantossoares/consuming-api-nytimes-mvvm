@@ -4,40 +4,34 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.newyorkbooks.data.Book
 import com.example.newyorkbooks.repository.BooksRepository
-import com.example.newyorkbooks.repository.dto.BookResponse
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import io.reactivex.disposables.Disposable
 
 class BooksViewModel : ViewModel() {
+    var disposableListBook: Disposable? = null
     val repository by lazy { BooksRepository() }
     val loadLiveData = MutableLiveData<Boolean>()
     val successLiveData = MutableLiveData<List<Book>>()
     val messageToastLiveData = MutableLiveData<String>()
 
-    fun getBooks() {
+    fun listarLivros() {
         loadLiveData.value = true
-        repository.getBooks().enqueue(object : Callback<BookResponse> {
-            override fun onResponse(
-                call: Call<BookResponse>,
-                bookResponse: Response<BookResponse>
-            ) {
-                loadLiveData.value = false
-                if (bookResponse.isSuccessful) {
-                    val listBooksConverted = bookResponse.body()?.results?.map {
-                        Book(it.bookDetails[0].title, it.bookDetails[0].author)
-                    }
-                    successLiveData.value = listBooksConverted
-                } else {
-                    messageToastLiveData.value = bookResponse.message()
-                }
+        repository.listarLivros()
+            .doOnSubscribe {
+                disposableListBook = it
             }
-
-            override fun onFailure(call: Call<BookResponse>, t: Throwable) {
-                loadLiveData.value = false
-                messageToastLiveData.value = t.message
+            .doOnSuccess {
+                successLiveData.value = it
             }
-        })
+            .doOnError {
+                messageToastLiveData.value = it.message
+            }
+            .doFinally {
+                loadLiveData.value = false
+            }.subscribe()
+    }
+    override fun onCleared() {
+        super.onCleared()
+        disposableListBook?.dispose()
     }
 
 }

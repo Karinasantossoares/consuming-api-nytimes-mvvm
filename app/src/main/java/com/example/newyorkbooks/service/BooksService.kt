@@ -1,7 +1,7 @@
 package com.example.newyorkbooks.service
 
-import com.example.newyorkbooks.repository.dto.BookResponse
-import retrofit2.Call
+import com.example.newyorkbooks.repository.dto.BookDTO
+import io.reactivex.Single
 import retrofit2.http.*
 
 interface BooksService {
@@ -10,5 +10,6 @@ interface BooksService {
     fun listarLivros(
         @Query("api-key")  apiKey :String = "OvLFiMrbuUSoR3bJsO5GUfGtyA6p1JTy",
         @Query("list") list: String = "hardcover-fiction"
-    ): Call<BookResponse>
+    ): Single<BookDTO>
+
 }

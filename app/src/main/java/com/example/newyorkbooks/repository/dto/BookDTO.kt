@@ -2,7 +2,7 @@ package com.example.newyorkbooks.repository.dto
 
 import com.google.gson.annotations.SerializedName
 
-data class BookResponse(
+data class BookDTO(
     val results: List<Results>
 )
 

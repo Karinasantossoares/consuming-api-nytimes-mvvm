@@ -15,8 +15,8 @@ import androidx.navigation.findNavController
 import com.example.newyorkbooks.R
 import com.example.newyorkbooks.data.Book
 import com.example.newyorkbooks.databinding.FragmentBooksBinding
-import com.example.newyorkbooks.ui.fragments.FavoriteDetailsFragment.Companion.BOOK
 import com.example.newyorkbooks.ui.adapter.BooksAdapter
+
 import com.example.newyorkbooks.viewModel.BooksViewModel
 import kotlinx.android.synthetic.main.fragment_books.*
 
@@ -48,7 +48,7 @@ class BooksFragment : Fragment() {
 
         toolbar_main.setTitle(R.string.books_title)
 
-        viewModel.getBooks()
+        viewModel.listarLivros()
 
         viewModel.loadLiveData.observe(this.viewLifecycleOwner, Observer {
             binding.pbLoad.isVisible = it
@@ -60,15 +60,15 @@ class BooksFragment : Fragment() {
 
         viewModel.successLiveData.observe(
             this.viewLifecycleOwner,
-            Observer { listBooks: List<Book> ->
-                val adapterSuccess = BooksAdapter(listBooks) {
+            Observer {listBooks->
+                val adapter = BooksAdapter(listBooks) {
                     val bundle = bundleOf(
-                        BOOK to it
+                        FavoriteDetailsFragment.BOOK to it
                     )
                     view.findNavController()
                         .navigate(R.id.action_booksActivity_to_favoriteDetails, bundle)
                 }
-                recycler_books.adapter = adapterSuccess
+                recycler_books.adapter = adapter
             })
     }
 }
