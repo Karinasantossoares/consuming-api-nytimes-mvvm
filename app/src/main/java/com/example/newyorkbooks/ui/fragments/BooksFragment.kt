@@ -10,10 +10,8 @@ import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.example.newyorkbooks.R
-import com.example.newyorkbooks.data.Book
 import com.example.newyorkbooks.databinding.FragmentBooksBinding
 import com.example.newyorkbooks.ui.adapter.BooksAdapter
 
@@ -45,10 +43,10 @@ class BooksFragment : Fragment() {
 
         toolbar_main.setTitle(R.string.books_title)
 
-        viewModel.listarLivros()
+        viewModel.listBooksNetwork()
 
         viewModel.loadLiveData.observe(this.viewLifecycleOwner, Observer {
-            binding.pbLoad.isVisible = it
+            binding.swipeContainer.isRefreshing= it
         })
 
         viewModel.messageToastLiveData.observe(this.viewLifecycleOwner, Observer {
@@ -67,5 +65,11 @@ class BooksFragment : Fragment() {
                 }
                 recycler_books.adapter = adapter
             })
+
+        binding.swipeContainer.setOnRefreshListener {
+            viewModel.listBooksNetwork()
+        }
     }
+
+
 }

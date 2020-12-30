@@ -1,6 +1,7 @@
-package com.example.newyorkbooks.ui
+package com.example.newyorkbooks
 
 import android.app.Application
+import com.example.newyorkbooks.di.persistenceModule
 import com.example.newyorkbooks.di.repositoryModule
 import com.example.newyorkbooks.di.serviceModule
 import com.example.newyorkbooks.di.viewModelModule
@@ -13,7 +14,7 @@ class BaseApplication : Application() {
         super.onCreate()
         startKoin {
             androidContext(this@BaseApplication)
-            modules(viewModelModule, repositoryModule, serviceModule)
+            modules(viewModelModule, repositoryModule, serviceModule,persistenceModule)
         }
     }
 }

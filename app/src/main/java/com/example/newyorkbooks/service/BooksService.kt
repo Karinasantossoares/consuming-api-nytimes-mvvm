@@ -1,6 +1,6 @@
 package com.example.newyorkbooks.service
 
-import com.example.newyorkbooks.repository.dto.BookDTO
+import com.example.newyorkbooks.repository.network.dto.BookDTO
 import io.reactivex.Single
 import retrofit2.http.*
 

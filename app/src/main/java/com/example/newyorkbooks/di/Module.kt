@@ -1,7 +1,9 @@
 package com.example.newyorkbooks.di
 
+import com.example.newyorkbooks.di.database.AppDataBase
 import com.example.newyorkbooks.repository.BooksRepository
-import com.example.newyorkbooks.repository.retrofit.initRetrofit
+import com.example.newyorkbooks.di.retrofit.initRetrofit
+import com.example.newyorkbooks.repository.local.BookDao
 import com.example.newyorkbooks.service.BooksService
 import com.example.newyorkbooks.viewModel.BooksViewModel
 import org.koin.android.ext.koin.androidContext
@@ -14,7 +16,13 @@ val viewModelModule = module {
 }
 
 val repositoryModule = module {
-    single { BooksRepository(get()) }
+    single { BooksRepository(get(),get()) }
+}
+
+val persistenceModule = module {
+    single { AppDataBase.instance(androidContext()) }
+    single {get<AppDataBase>().bookDao()  }
+
 }
 
 val serviceModule = module {
