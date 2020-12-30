@@ -1,14 +1,15 @@
 package com.example.newyorkbooks.viewModel
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.newyorkbooks.data.Book
 import com.example.newyorkbooks.repository.BooksRepository
 import io.reactivex.disposables.Disposable
 
-class BooksViewModel : ViewModel() {
+class BooksViewModel(private val context : Context ,private val repository:BooksRepository) : ViewModel() {
     var disposableListBook: Disposable? = null
-    val repository by lazy { BooksRepository() }
+
     val loadLiveData = MutableLiveData<Boolean>()
     val successLiveData = MutableLiveData<List<Book>>()
     val messageToastLiveData = MutableLiveData<String>()

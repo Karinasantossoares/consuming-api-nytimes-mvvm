@@ -19,17 +19,14 @@ import com.example.newyorkbooks.ui.adapter.BooksAdapter
 
 import com.example.newyorkbooks.viewModel.BooksViewModel
 import kotlinx.android.synthetic.main.fragment_books.*
+import org.koin.android.viewmodel.ext.android.viewModel
 
 
 class BooksFragment : Fragment() {
 
     private lateinit var binding: FragmentBooksBinding
 
-    private val viewModel by lazy {
-        ViewModelProvider(
-            this, ViewModelProvider.AndroidViewModelFactory(requireActivity().application)
-        ).get(BooksViewModel::class.java)
-    }
+    private val viewModel : BooksViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
