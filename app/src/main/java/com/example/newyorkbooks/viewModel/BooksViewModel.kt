@@ -18,50 +18,38 @@ class BooksViewModel(private val context: Context, private val repository: Books
 
     fun listBooksNetwork() {
         loadLiveData.value = true
-        disposables.add(repository.listBooksNetwork().doOnSuccess { listBooks ->
-            deleteAllBookLocal {
-                insertListBookLocal(listBooks)
+
+        disposables.add(repository.listBooksNetwork().subscribe { res, error ->
+            if (error == null) {
+                deleteAllBookLocal {
+                    disposables.add(repository.insertListBookLocal(res).subscribe())
+                }
+                successLiveData.value = res
+            } else {
+                messageToastLiveData.value = context.getString(R.string.error_get_books_network)
+                listBooksLocal()
             }
-            successLiveData.value = listBooks
-        }.doOnError {
-            messageToastLiveData.value = context.getString(R.string.error_get_books_network)
-        }.doFinally {
             loadLiveData.value = false
-        }.subscribe({}, {
-            listBooksLocal()
-        }))
+        })
     }
+
 
     private fun listBooksLocal() {
-        repository.listBooksLocal()
-            .doOnSubscribe {
-                disposables.add(it)
-            }
-            .doOnSuccess {
-                if (it.isEmpty()) {
-                    messageToastLiveData.value = context.getString(R.string.error_get_books_local)
-                } else {
-                    successLiveData.value = it
-                }
-            }
-            .doOnError {
+        disposables.add(repository.listBooksLocal().subscribe { res, error ->
+            if (res.isNotEmpty()) {
+                successLiveData.value = res
+            } else {
                 messageToastLiveData.value = context.getString(R.string.error_get_books_local)
-            }.subscribe()
-    }
-
-    private fun insertListBookLocal(listBook: List<Book>) {
-        repository.insertListBookLocal(listBook)
-            .doOnSubscribe {
-                disposables.add(it)
-            }.doOnError {}.subscribe()
+            }
+        })
     }
 
     private fun deleteAllBookLocal(eventSuccess: () -> Unit) {
-        repository.deleteListBookLocal().doOnSubscribe {
-            disposables.add(it)
-        }.doOnSuccess {
-            eventSuccess.invoke()
-        }.doOnError {}.subscribe()
+        disposables.add(repository.deleteListBookLocal().subscribe() { _, error ->
+            if (error == null) {
+                eventSuccess.invoke()
+            }
+        })
     }
 
 
