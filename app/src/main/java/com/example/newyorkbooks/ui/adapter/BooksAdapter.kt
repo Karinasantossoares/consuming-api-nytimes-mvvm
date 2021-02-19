@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.newyorkbooks.R
 import com.example.newyorkbooks.data.Book
 
-class BooksAdapter(private val books: List<Book>, val onClick: (Book) -> Unit) :
+class   BooksAdapter(private val books: List<Book>, val onClick: (Book) -> Unit) :
     RecyclerView.Adapter<BooksAdapter.BooksViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BooksViewHolder {
